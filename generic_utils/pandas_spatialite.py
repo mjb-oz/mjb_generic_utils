@@ -4,7 +4,7 @@ import geopandas as gpd
 import sqlite3
 import shapely
 
-def DFtoDB(df, con, tablename, epsg = None):
+def gpd_to_spatialite(df, con, tablename, epsg = None):
     '''
     This function takes a dataframe or geodataframe, a connection object to a spatialite database, and a name for the new table (as a string),
     and creates a new table in database with the data of the dataframe.
@@ -232,3 +232,18 @@ def DFtoDB(df, con, tablename, epsg = None):
         # makeSpatialIndex(tablename, geom_col)   
     con.commit()
     cur.close()
+
+def spatialite_to_gdb(con, table):
+    query = 'select * from {}'.format(table)
+    df = pd.read_sql_query(query, con)
+    if 'geom' not in df.columns:
+        return df
+    else:
+        epsg = con.cursor().execute('select SRID(geom) from {}'.format(table))[0][0]
+        df = gpd.GeoDataFrame(df)
+        df.crs = {'init':'epsg:{}'.format(epsg)}
+
+
+# def spatialite_table_to_gdb(con, table):
+#
+#     return = spatialite_to gdb(con, query)

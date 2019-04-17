@@ -1,0 +1,4 @@
+
+*.pyc
+*.pyc
+generic_utils/__pycache__/pandas_spatialite.cpython-36.pyc

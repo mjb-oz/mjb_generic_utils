@@ -103,7 +103,7 @@ def listColumns(table_name, con):
     :return:
     A list of all the columns in the requested table
     '''
-    cols = [row[1] for row in con.cursor().execute("pragma table_info('{}')".format(table_name).fetchall()]
+    cols = [row[1] for row in con.cursor().execute("pragma table_info('{}')".format(table_name)).fetchall()]
     return cols
     
 def describeTable(table_name, con):
